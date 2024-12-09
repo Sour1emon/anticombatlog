@@ -1,0 +1,4 @@
+name: deadbody
+version: '1.0-SNAPSHOT'
+main: com.github.sour1emon.deadbody.DeadBody
+api-version: '1.21'
