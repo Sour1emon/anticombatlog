@@ -18,12 +18,18 @@ repositories {
     maven("https://repo.codemc.io/repository/maven-public/") {
         name = "CodeMC"
     }
+    maven("https://maven.citizensnpcs.co/repo") {
+        name = "citizens-repo"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("de.tr7zw:item-nbt-api:2.14.0")
+    compileOnly("net.citizensnpcs:citizens-main:2.0.36-SNAPSHOT") {
+        exclude("*", "*")
+    }
 }
 
 val targetJavaVersion = 21
@@ -46,6 +52,6 @@ tasks.processResources {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.1")
+        minecraftVersion("1.21.3")
     }
 }
