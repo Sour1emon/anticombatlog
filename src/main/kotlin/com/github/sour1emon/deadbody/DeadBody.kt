@@ -3,7 +3,6 @@ package com.github.sour1emon.deadbody
 import de.tr7zw.changeme.nbtapi.NBT
 import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.npc.NPC
-import net.citizensnpcs.api.npc.NPCRegistry
 import net.citizensnpcs.trait.SkinTrait
 import org.bukkit.Bukkit
 import org.bukkit.enchantments.Enchantment
@@ -21,7 +20,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.server.ServerLoadEvent
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.scheduler.BukkitScheduler
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -69,9 +67,9 @@ class DeadBody : JavaPlugin(), Listener {
         val entity = event.entity
 
         if (damager != null) {
-            var damagerUUID = damager.uniqueId;
+            var damagerUUID = damager.uniqueId
             if (damager is Wolf && damager.owner is Player) {
-                damagerUUID = (damager.owner as Player).uniqueId;
+                damagerUUID = (damager.owner as Player).uniqueId
             }
 
             if (entity is Player && (damager is Player || (damager is Wolf && damager.owner is Player)) && damager != entity) {
@@ -80,7 +78,7 @@ class DeadBody : JavaPlugin(), Listener {
                     lastCombatTime[playerUUID] = System.currentTimeMillis()
                 }
                 if (!damager.hasMetadata("NPC")) {
-                    lastCombatTime[damagerUUID] = System.currentTimeMillis();
+                    lastCombatTime[damagerUUID] = System.currentTimeMillis()
                 }
                 logger.info("${entity.name} has been damaged by ${damager.name}.")
             }
@@ -94,10 +92,10 @@ class DeadBody : JavaPlugin(), Listener {
             val playerUUID = UUID.fromString(entity.getMetadata("target_player")[0].asString())
             val playerDataFile = File(Bukkit.getWorld("world")!!.worldFolder, "playerdata/$playerUUID.dat")
             if (playerDataFile.exists()) {
-                val nbtFile = NBT.getFileHandle(playerDataFile);
+                val nbtFile = NBT.getFileHandle(playerDataFile)
                 val inventory = nbtFile.getCompoundList("Inventory")
                 for (item in inventory) {
-                    val itemStack = NBT.itemStackFromNBT(item);
+                    val itemStack = NBT.itemStackFromNBT(item)
                     if (itemStack != null) {
                         if (!itemStack.containsEnchantment(Enchantment.VANISHING_CURSE)) {
                             entity.world.dropItemNaturally(entity.location, itemStack)
@@ -120,11 +118,11 @@ class DeadBody : JavaPlugin(), Listener {
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        val uuid = event.player.uniqueId;
+        val uuid = event.player.uniqueId
         if (!lastCombatTime.containsKey(uuid)) {
             lastCombatTime[uuid] = 0
         }
-        val combatLogged = playerCombatLogged(uuid);
+        val combatLogged = playerCombatLogged(uuid)
         if (combatLogged != null) {
             combatLogged.destroy()
             deadPlayers.remove(combatLogged.uniqueId)
